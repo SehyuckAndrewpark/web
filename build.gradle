@@ -1,0 +1,29 @@
+plugins {
+    id 'org.springframework.boot' version '2.4.5'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+    id "io.freefair.lombok" version "5.3.0"
+}
+
+group = 'kr.mjc.sehyuckpark'
+version = '0.0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Spring MVC
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    // Spring JDBC
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    // Live reload
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    // JSP (JSTL, EL)
+    implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
+    runtimeOnly 'javax.servlet:jstl'
+
+    // MariaDB JDBC Driver
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+}
