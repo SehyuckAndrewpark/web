@@ -1,5 +1,6 @@
 package kr.mjc.sehyuckpark.web.mvc;
 
+import kr.mjc.sehyuckpark.web.articlemvc.ArticleexController;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.ServletException;
@@ -15,6 +16,9 @@ public class DispatcherServlet extends HttpServlet {
     @Autowired
     UserController userController;
 
+    @Autowired
+    ArticleController articleController;
+
     @Override
     protected void service(HttpServletRequest request,
                            HttpServletResponse response)
@@ -28,6 +32,14 @@ public class DispatcherServlet extends HttpServlet {
             case "/mvc/user/userInfo" -> userController.userInfo(request, response);
             case "/mvc/user/addUser" -> userController.addUser(request, response);
             case "/mvc/user/login" -> userController.login(request, response);
+            case "/mvc/user/logout" -> userController.logout(request, response);
+            case "/mvc/article/articleList" -> articleController.articleList(request, response);
+            case "/mvc/article/articleView" -> articleController.articleView(request, response);
+            case "/mvc/article/articleForm" -> articleController.articleForm(request, response);
+            case "/mvc/article/articleEdit" -> articleController.articleEdit(request, response);
+            case "/mvc/article/addArticle" -> articleController.addArticle(request, response);
+            case "/mvc/article/updateArticle" -> articleController.updateArticle(request, response);
+            case "/mvc/article/deleteArticle" -> articleController.deleteArticle(request, response);
             default -> response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
     }

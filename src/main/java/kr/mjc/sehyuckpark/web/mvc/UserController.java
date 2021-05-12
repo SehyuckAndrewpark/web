@@ -30,7 +30,7 @@ public class UserController {
             throws ServletException, IOException {
         request.setAttribute("userList", userDao.listUsers(0, 100));
 
-        request.getRequestDispatcher("/WEB-INF/jsp/model2/user/userList.jsp")
+        request.getRequestDispatcher("/WEB-INF/jsp/mvc/user/userList.jsp")
                 .forward(request, response);
     }
 
@@ -40,7 +40,7 @@ public class UserController {
     public void userForm(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        request.getRequestDispatcher("/WEB-INF/jsp/model2/user/userForm.jsp")
+        request.getRequestDispatcher("/WEB-INF/jsp/mvc/user/userForm.jsp")
                 .forward(request, response);
     }
 
@@ -51,7 +51,7 @@ public class UserController {
                           HttpServletResponse response)
             throws ServletException, IOException {
 
-        request.getRequestDispatcher("/WEB-INF/jsp/model2/user/loginForm.jsp")
+        request.getRequestDispatcher("/WEB-INF/jsp/mvc/user/loginForm.jsp")
                 .forward(request, response);
     }
 
@@ -61,7 +61,7 @@ public class UserController {
     public void userInfo(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        request.getRequestDispatcher("/WEB-INF/jsp/model2/user/userInfo.jsp")
+        request.getRequestDispatcher("/WEB-INF/jsp/mvc/user/userInfo.jsp")
                 .forward(request, response);
     }
 
@@ -103,5 +103,15 @@ public class UserController {
             response.sendRedirect(request.getContextPath() +
                     "/mvc/user/loginForm?msg=Wrong email or password");
         }
+    }
+
+    /**
+     * Logout
+     */
+    public void logout(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+        HttpSession session = request.getSession();
+        session.invalidate();
+        response.sendRedirect(request.getContextPath() + "/");
     }
 }
