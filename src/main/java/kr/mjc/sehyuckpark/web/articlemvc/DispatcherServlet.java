@@ -13,7 +13,7 @@ import java.io.IOException;
 public class DispatcherServlet extends HttpServlet {
 
     @Autowired
-    ArticleController articleController;
+    ArticleexController articleexController;
 
     @Override
     protected void service(HttpServletRequest request,
@@ -22,16 +22,16 @@ public class DispatcherServlet extends HttpServlet {
         String uri = request.getRequestURI();
 
         switch (uri) {
-            case "/articlemvc/article/articleList" -> articleController.articleList(request, response);
-            case "/articlemvc/article/addArticle" -> articleController.addArticle(request, response);
-            case "/articlemvc/article/articleForm" -> articleController.articleForm(request, response);
-            case "/articlemvc/article/articleInfo" -> articleController.articleInfo(request, response);
-            case "/articlemvc/article/deleteArticle" -> articleController.deleteArticle(request, response);
-            case "/articlemvc/article/deleteForm" -> articleController.deleteForm(request, response);
-            case "/articlemvc/article/updateArticle" -> articleController.updateArticle(request, response);
-            case "/articlemvc/article/updateForm" -> articleController.updateForm(request, response);
-            case "/articlemvc/article/get" -> articleController.get(request, response);
-            case "/articlemvc/article/getForm" -> articleController.getForm(request, response);
+            case "/articlemvc/article/articleList" -> articleexController.articleList(request, response);
+            case "/articlemvc/article/addArticle" -> articleexController.addArticle(request, response);
+            case "/articlemvc/article/articleForm" -> articleexController.articleForm(request, response);
+            case "/articlemvc/article/articleInfo" -> articleexController.articleInfo(request, response);
+            case "/articlemvc/article/deleteArticle" -> articleexController.deleteArticle(request, response);
+            case "/articlemvc/article/deleteForm" -> articleexController.deleteForm(request, response);
+            case "/articlemvc/article/updateArticle" -> articleexController.updateArticle(request, response);
+            case "/articlemvc/article/updateForm" -> articleexController.updateForm(request, response);
+            case "/articlemvc/article/get" -> articleexController.get(request, response);
+            case "/articlemvc/article/getForm" -> articleexController.getForm(request, response);
             default -> response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
     }
