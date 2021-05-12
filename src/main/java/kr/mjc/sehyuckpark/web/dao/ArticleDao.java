@@ -1,5 +1,6 @@
 package kr.mjc.sehyuckpark.web.dao;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -15,7 +16,7 @@ import java.util.Map;
 public class ArticleDao {
 
     private static final String LIST_ARTICLES = """
-      select articleId, title, userId, name, left(cdate,16) cdate
+      select articleId, title, userId, name, left(cdate,16) cdate, left(udate,16) udate
       from article order by articleId desc limit ?,?""";
 
     private static final String GET_ARTICLE = """
@@ -31,40 +32,56 @@ public class ArticleDao {
       update article set title=:title, content=:content
       where articleId=:articleId and userId=:userId""";
 
-    private static final String DELETE_ARTICLE =
-            "delete from article where articleId=:articleId and userId=:userId";
+    private static final String DELETE_ARTICLE
+            = "delete from article where articleId=:articleId and userId=:userId";
 
     private JdbcTemplate jdbcTemplate;
 
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    private RowMapper<Article> rowMapper =
-            new BeanPropertyRowMapper<>(Article.class);
+    private RowMapper<Article> rowMapper = new BeanPropertyRowMapper<>(
+            Article.class);
 
+    @Autowired
     public ArticleDao(JdbcTemplate jdbcTemplate,
                       NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
+    /**
+     * list
+     */
     public List<Article> listArticles(int offset, int count) {
         return jdbcTemplate.query(LIST_ARTICLES, rowMapper, offset, count);
     }
 
+    /**
+     * get article
+     */
     public Article getArticle(int articleId) {
         return jdbcTemplate.queryForObject(GET_ARTICLE, rowMapper, articleId);
     }
 
+    /**
+     * add article
+     */
     public void addArticle(Article article) {
         namedParameterJdbcTemplate
                 .update(ADD_ARTICLE, new BeanPropertySqlParameterSource(article));
     }
 
+    /**
+     * update article
+     */
     public int updateArticle(Article article) {
         return namedParameterJdbcTemplate
                 .update(UPDATE_ARTICLE, new BeanPropertySqlParameterSource(article));
     }
 
+    /**
+     * delete article
+     */
     public int deleteArticle(int articleId, int userId) {
         Map<String, Object> params = new HashMap<>();
         params.put("articleId", articleId);

@@ -11,4 +11,8 @@ public class Article {
     String name;
     String cdate;
     String udate;
+
+    public String getContentHtml() {
+        return content.replaceAll("\n", "<br>");
+    }
 }

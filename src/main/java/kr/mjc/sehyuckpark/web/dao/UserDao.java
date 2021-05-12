@@ -1,6 +1,8 @@
 package kr.mjc.sehyuckpark.web.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -46,30 +48,63 @@ public class UserDao {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
+    /**
+     * List
+     */
     public List<User> listUsers(int offset, int count) {
         return jdbcTemplate.query(LIST_USERS, rowMapper, offset, count);
     }
 
-    public User login(String email, String password) {
+    /**
+     * Login
+     *
+     * @return user information who log in
+     * @throws EmptyResultDataAccessException when fail the log in
+     */
+    public User login(String email, String password) throws
+            EmptyResultDataAccessException {
         return jdbcTemplate.queryForObject(LOGIN, rowMapper, email, password);
     }
 
+    /**
+     * user view
+     */
     public User getUser(int userId) {
         return jdbcTemplate.queryForObject(GET_USER, rowMapper, userId);
     }
 
-    public void addUser(User user) {
+    /**
+     * add user
+     *
+     * @throws DuplicateKeyException if use same e-mail
+     */
+    public void addUser(User user) throws DuplicateKeyException {
         namedParameterJdbcTemplate
                 .update(ADD_USER, new BeanPropertySqlParameterSource(user));
     }
 
-    public int updateEmail(int userId, String email) {
+    /**
+     * update email
+     *
+     * @return 수정한 행의 갯수
+     * @throws DuplicateKeyException
+     */
+    public int updateEmail(int userId, String email)
+            throws DuplicateKeyException {
         Map<String, Object> params = new HashMap<>();
         params.put("userId", userId);
         params.put("email", email);
         return namedParameterJdbcTemplate.update(UPDATE_EMAIL, params);
     }
 
+    /**
+     * 비밀번호 수정
+     *
+     * @param userId      user id
+     * @param password    password
+     * @param newPassword new password
+     * @return params
+     */
     public int updatePassword(int userId, String password, String newPassword) {
         Map<String, Object> params = new HashMap<>();
         params.put("userId", userId);
