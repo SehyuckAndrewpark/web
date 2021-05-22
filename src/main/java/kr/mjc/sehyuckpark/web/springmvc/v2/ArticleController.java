@@ -37,6 +37,9 @@ public class ArticleController {
         model.addAttribute("articleList", articleList);
     }
 
+    /**
+     * ArticleView
+     */
     @GetMapping("/articleView")
     public String articleView(@RequestParam int articleId, Model model) {
         Article article = articleDao.getArticle(articleId);
@@ -44,6 +47,9 @@ public class ArticleController {
         return "springmvc/v2/article/articleView";
     }
 
+    /**
+     * ArticleForm
+     */
     @GetMapping("/articleForm")
     public String articleForm(HttpSession session, RedirectAttributes attributes) {
         User user = (User)session.getAttribute("USER");
@@ -54,6 +60,9 @@ public class ArticleController {
         return "/springmvc/v2/article/articleForm";
     }
 
+    /**
+     * ArticleEdit
+     */
     @GetMapping("/articleEdit")
     public String articleEdit(@RequestParam int articleId, HttpSession session,
                               RedirectAttributes attributes, Model model) {
@@ -70,6 +79,9 @@ public class ArticleController {
         return "/redirect:/springmvc/v2/article/articleList";
     }
 
+    /**
+     * AddArticle
+     */
     @PostMapping("/addArticle")
     public String addArticle(@ModelAttribute Article article,
                              HttpSession session, RedirectAttributes attributes) {
@@ -84,6 +96,9 @@ public class ArticleController {
         }
     }
 
+    /**
+     * UpdateArticle
+     */
     @PostMapping("/updateArticle")
     public String updateArticle(@ModelAttribute Article article,
                                 HttpSession session, RedirectAttributes attributes) {
@@ -101,6 +116,9 @@ public class ArticleController {
         }
     }
 
+    /**
+     * DeleteArticle
+     */
     @GetMapping("/deleteArticle")
     public String deleteArticle(@RequestParam int articleId,
                                 HttpSession session, RedirectAttributes attributes) {
