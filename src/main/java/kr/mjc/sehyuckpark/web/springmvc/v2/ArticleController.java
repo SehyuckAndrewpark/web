@@ -1,6 +1,5 @@
 package kr.mjc.sehyuckpark.web.springmvc.v2;
 
-
 import kr.mjc.sehyuckpark.web.dao.Article;
 import kr.mjc.sehyuckpark.web.dao.ArticleDao;
 import kr.mjc.sehyuckpark.web.dao.User;
@@ -8,132 +7,105 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller("articleControllerV2")
 @RequestMapping("/springmvc/v2/article")
+
 public class ArticleController {
 
     private final ArticleDao articleDao;
 
     @Autowired
-    public ArticleController (ArticleDao articleDao) {
+    public ArticleController(ArticleDao articleDao) {
         this.articleDao = articleDao;
     }
 
-    /**
-     * ArticleList
-     */
     @GetMapping("/articleList")
     public void articleList(
-            @RequestParam(name="page", required = false, defaultValue = "1") int page,
-            Model model) {
-        int count = 25;
-        int offset = (page -1) * count;
+            @RequestParam(required = false, defaultValue = "1") int page,
+            @RequestParam(required = false, defaultValue = "20") int count,
+            HttpSession session, Model model) {
+        int offset = (page - 1) * count;
         List<Article> articleList = articleDao.listArticles(offset, count);
+        int totalCount = articleDao.countArticles();
         model.addAttribute("articleList", articleList);
+        model.addAttribute("totalCount", totalCount);
+        session.setAttribute("currentPage", page);
+        session.setAttribute("countPerPage", count);
     }
 
-    /**
-     * ArticleView
-     */
+    @GetMapping("/myArticle")
+    public void myArticle(
+            @RequestParam(required = false, defaultValue = "1") int page,
+            @RequestParam(required = false, defaultValue = "10") int count,
+            @SessionAttribute("USER") User user,
+            HttpSession session, Model model) {
+        int offset = (page - 1) * count;
+        List<Article> myArticle = articleDao.myArticles(user.getUserId(), offset, count);
+        int totalCount = articleDao.countMyArticles(user.getUserId());
+        model.addAttribute("myArticle", myArticle);
+        model.addAttribute("totalCount", totalCount);
+        session.setAttribute("currentPage", page);
+        session.setAttribute("countPerPage", count);
+    }
+
     @GetMapping("/articleView")
-    public String articleView(@RequestParam int articleId, Model model) {
+    public void articleView(int articleId, Model model) {
         Article article = articleDao.getArticle(articleId);
         model.addAttribute("article", article);
-        return "springmvc/v2/article/articleView";
+        // forward /WEB-INF/springmvc/v2/article/articleView.jsp
     }
 
-    /**
-     * ArticleForm
-     */
-    @GetMapping("/articleForm")
-    public String articleForm(HttpSession session, RedirectAttributes attributes) {
-        User user = (User)session.getAttribute("USER");
-        if (user == null) {
-            attributes.addFlashAttribute("msg", "Please Login");
-            return "redirect:/springmvc/v2/user/loginForm";
-        }
-        return "/springmvc/v2/article/articleForm";
-    }
-
-    /**
-     * ArticleEdit
-     */
     @GetMapping("/articleEdit")
-    public String articleEdit(@RequestParam int articleId, HttpSession session,
-                              RedirectAttributes attributes, Model model) {
-        User user = (User)session.getAttribute("USER");
-        if (user == null) {
-            attributes.addFlashAttribute("msg", "Please Login");
-            return "redirect:/springmvc/v2/user/loginForm";
-        }
+    public String articleEdit(@RequestParam int articleId,
+                              @SessionAttribute("USER") User user, Model model) {
         Article article = articleDao.getArticle(articleId);
+        if (user.getUserId() != article.getUserId())
+            return "error/401";
+
         model.addAttribute("article", article);
-        if (user.getUserId() == article.getUserId()) {
-            return "/springmvc/v2/article/articleEdit";
-        }
-        return "/redirect:/springmvc/v2/article/articleList";
+        return "springmvc/v2/article/articleEdit";
     }
 
-    /**
-     * AddArticle
-     */
     @PostMapping("/addArticle")
     public String addArticle(@ModelAttribute Article article,
-                             HttpSession session, RedirectAttributes attributes) {
-        User user = (User)session.getAttribute("USER");
-        if (user == null) {
-            attributes.addFlashAttribute("msg", "Please Login");
-            return "redirect:/springmvc/v2/user/loginForm";
-        }
-        else {
-            articleDao.addArticle(article);
-            return "redirect:/springmvc/v2/article/articleList";
-        }
+                             @SessionAttribute("USER") User user,
+                             @SessionAttribute String countPerPage) {
+        article.setUserId(user.getUserId());
+        article.setName(user.getName());
+        articleDao.addArticle(article);
+        return "redirect:/springmvc/v2/article/articleList?page=1&count=" +
+                countPerPage;
     }
 
-    /**
-     * UpdateArticle
-     */
     @PostMapping("/updateArticle")
     public String updateArticle(@ModelAttribute Article article,
-                                HttpSession session, RedirectAttributes attributes) {
-        User user = (User)session.getAttribute("USER");
-        if (user == null) {
-            attributes.addFlashAttribute("msg", "Please Login");
-            return "redirect:/springmvc/v2/user/loginForm";
-        }
+                                @SessionAttribute("USER") User user) {
         article.setUserId(user.getUserId());
-        int updatedRows = articleDao.updateArticle(article);
-        if (updatedRows > 0)
-            return "redirect:/springmvc/v2/article/articleView" + "?articleId=" + article.getArticleId();
-        else {
-            return "redirect:/springmvc/v2/user/userInfo";
-        }
+
+        int result = articleDao.updateArticle(article);
+        if (result == 0)
+            return "error/400";
+
+        return "redirect:/springmvc/v2/article/articleView?articleId=" +
+                article.getArticleId();
     }
 
-    /**
-     * DeleteArticle
-     */
     @GetMapping("/deleteArticle")
-    public String deleteArticle(@RequestParam int articleId,
-                                HttpSession session, RedirectAttributes attributes) {
-        User user = (User)session.getAttribute("USER");
-        if (user == null) {
-            attributes.addFlashAttribute("msg", "Please Login");
-            return "redirect:/springmvc/v2/user/loginForm";
+    public String deleteArticle(int articleId,
+                                @SessionAttribute("USER") User user,
+                                @SessionAttribute String currentPage,
+                                @SessionAttribute String countPerPage) {
+        int result = articleDao.deleteArticle(articleId, user.getUserId());
+        if (result == 0) {
+            return "error/401";
         }
-        Article article = articleDao.getArticle(articleId);
-        if (user.getUserId() == article.getUserId()) {
-            articleDao.deleteArticle(articleId, user.getUserId());
-            return "redirect:/springmvc/v2/article/articleList";
-        }
-        else {
-            return "redirect:/springmvc/v2/user/userInfo";
-        }
+        return String
+                .format("redirect:/springmvc/v2/article/articleList?page=%s&count=%s",
+                        currentPage, countPerPage);
     }
+
 }
