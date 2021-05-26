@@ -6,18 +6,28 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Component
+@Repository
 public class ArticleDao {
 
     private static final String LIST_ARTICLES = """
       select articleId, title, userId, name, left(cdate,16) cdate, left(udate,16) udate
       from article order by articleId desc limit ?,?""";
+
+    private static final String MY_ARTICLES = """
+      select articleId, title, userId, name, left(cdate,16) cdate
+      from article where userId=? order by articleId desc limit ?,?""";
+
+    public static final String COUNT_ARTICLES =
+            "select count(articleId) from article";
+
+    public static final String COUNT_MYARTICLES =
+            "select count(articleId) from article where userId=?";
 
     private static final String GET_ARTICLE = """
       select articleId, title, content, userId, name,
@@ -49,39 +59,36 @@ public class ArticleDao {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
-    /**
-     * list
-     */
     public List<Article> listArticles(int offset, int count) {
         return jdbcTemplate.query(LIST_ARTICLES, rowMapper, offset, count);
     }
 
-    /**
-     * get article
-     */
+    public List<Article> myArticles(int userId, int offset, int count) {
+        return jdbcTemplate.query(MY_ARTICLES, rowMapper, userId, offset, count);
+    }
+
+    public Integer countArticles() {
+        return jdbcTemplate.queryForObject(COUNT_ARTICLES, Integer.class);
+    }
+
+    public Integer countMyArticles(int userId) {
+        return jdbcTemplate.queryForObject(COUNT_MYARTICLES, Integer.class, userId);
+    }
+
     public Article getArticle(int articleId) {
         return jdbcTemplate.queryForObject(GET_ARTICLE, rowMapper, articleId);
     }
 
-    /**
-     * add article
-     */
     public void addArticle(Article article) {
         namedParameterJdbcTemplate
                 .update(ADD_ARTICLE, new BeanPropertySqlParameterSource(article));
     }
 
-    /**
-     * update article
-     */
     public int updateArticle(Article article) {
         return namedParameterJdbcTemplate
                 .update(UPDATE_ARTICLE, new BeanPropertySqlParameterSource(article));
     }
 
-    /**
-     * delete article
-     */
     public int deleteArticle(int articleId, int userId) {
         Map<String, Object> params = new HashMap<>();
         params.put("articleId", articleId);
