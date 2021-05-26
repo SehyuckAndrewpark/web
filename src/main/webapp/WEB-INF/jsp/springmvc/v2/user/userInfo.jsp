@@ -1,18 +1,13 @@
-<%@ page import="kr.mjc.sehyuckpark.web.dao.User" %>
 <!DOCTYPE html>
-<% User user = (User) session.getAttribute("USER"); %>
 <html>
 <head>
-    <base href="<%= request.getContextPath()%>/">
+    <base href="${pageContext.request.contextPath}/">
 </head>
 <body>
 <%@ include file="/WEB-INF/jsp/springmvc/v2/menu.jsp" %>
 <h3>사용자 정보</h3>
-<p>사용자 번호 : <%=user.getUserId()%>
-</p>
-<p>이메일 : <%=user.getEmail()%>
-</p>
-<p>이름 : <%=user.getName()%>
-</p>
+<p>사용자 번호 : ${user.userId}</p>
+<p>이메일 : ${user.email}</p>
+<p>이름 : ${user.name}</p>
 </body>
 </html>

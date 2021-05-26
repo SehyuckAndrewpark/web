@@ -1,8 +1,7 @@
-<%@ page import="kr.mjc.sehyuckpark.web.dao.User" %>
 <!DOCTYPE html>
 <html>
 <head>
-    <base href="<%= request.getContextPath()%>/">
+    <base href="${pageContext.request.contextPath}/">
     <style type="text/css">
         input {
             width: 95%;
@@ -17,14 +16,12 @@
 <body>
 <%@ include file="/WEB-INF/jsp/springmvc/v2/menu.jsp" %>
 <h3>글쓰기</h3>
-<% User user = (User)session.getAttribute("USER"); %>
 <form action="./springmvc/v2/article/addArticle" method="post">
-    <p><input type="text" name="title" required autofocus/></p>
-    <p><textarea name="content" required></textarea></p>
-    <input type="hidden" name="userId" value="<%=user.getUserId()%>"/>
-    <input type="hidden" name="name" value="<%=user.getName()%>"/>
+    <p><input type="text" name="title" placeholder="제목" required autofocus/></p>
+    <p><textarea name="content" placeholder="내용" required></textarea></p>
     <p>
         <button type="submit">저장</button>
+        <button type="button" onclick="history.back();">취소</button>
     </p>
 </form>
 </body>
