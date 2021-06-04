@@ -15,9 +15,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
-/**
- * Tomcat Server Customizer. Encoding JSP, HTML to UTF-8
- */
 @Component
 @Slf4j
 public class TomcatServerCustomizer
@@ -42,6 +39,8 @@ public class TomcatServerCustomizer
                     new JspConfigDescriptorImpl(jspPropertyGroupDescriptors,
                             new HashSet<>());
             context.setJspConfigDescriptor(jspConfigDescriptor);
+
+            context.addWelcomeFile("/index.html");
         });
         factory.setTomcatContextCustomizers(col);
         log.info("Run Tomcat Customizer");
