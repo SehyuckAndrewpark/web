@@ -9,9 +9,4 @@ public class DefaultController {
     @GetMapping("/**")
     public void mapDefault() {
     }
-
-    @GetMapping("/")
-    public String mapIndex() {
-        return "index"; // forward /WEB-INF/jsp/index.jsp
-    }
 }

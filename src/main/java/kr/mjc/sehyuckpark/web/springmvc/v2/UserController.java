@@ -44,15 +44,15 @@ public class UserController {
         model.addAttribute("user", userDao.getUser(userId));
     }
 
-    @PostMapping("/addUser")
+    @PostMapping("/join")
     public String addUser(@ModelAttribute User user,
                           RedirectAttributes attributes) {
         try {
             userDao.addUser(user);
-            return "redirect:/springmvc/v2/user/userList";
+            return "redirect:/app/springmvc/v2/user/userList";
         } catch (DuplicateKeyException e) {
             attributes.addFlashAttribute("msg", "Duplicate email");
-            return "redirect:/springmvc/v2/user/userForm";
+            return "springmvc/v2/user/joinForm";
         }
     }
 
@@ -67,12 +67,12 @@ public class UserController {
         } catch (EmptyResultDataAccessException e) {
             attributes.addFlashAttribute("email", email);
             attributes.addFlashAttribute("msg", "Wrong email or password");
-            return "redirect:/springmvc/v2/user/loginForm?returnUrl=" +
+            return "redirect:/app/springmvc/v2/user/loginForm?returnUrl=" +
                     URLEncoder.encode(returnUrl, Charset.defaultCharset());
         }
     }
 
-    @PostMapping("/updateUser")
+    @PostMapping("/s/updateUser")
     public String updateUser(User user,
                              @SessionAttribute("USER") User sessionUser,
                              RedirectAttributes attributes) {
@@ -81,32 +81,30 @@ public class UserController {
             userDao.updateUser(user);
             sessionUser.setEmail(user.getEmail());
             sessionUser.setName(user.getName());
-            return "redirect:/springmvc/v2/user/myInfo";
+            return "springmvc/v2/user/s/myInfo";
         } catch (DuplicateKeyException e) {
             attributes.addFlashAttribute("user", user);
             attributes.addFlashAttribute("msg", "Duplicate email");
-            return "redirect:/springmvc/v2/user/userEdit";
+            return "redirect:/app/springmvc/v2/user/s/userEdit";
         }
     }
 
-    @PostMapping("/updatePassword")
+    @PostMapping("/s/updatePassword")
     public String updatePassword(String password, String newPassword,
                                  @SessionAttribute("USER") User user, RedirectAttributes attributes) {
         int result =
                 userDao.updatePassword(user.getUserId(), password, newPassword);
         if (result > 0) {
-            return "redirect:/springmvc/v2/user/myInfo";
+            return "springmvc/v2/user/s/myInfo";
         } else {
             attributes.addFlashAttribute("msg", "Wrong password");
-            return "redirect:/springmvc/v2/user/passwordForm";
+            return "redirect:/app/springmvc/v2/user/s/passwordForm";
         }
     }
 
-    @GetMapping("/logout")
+    @GetMapping("/s/logout")
     public String logout(HttpSession session) {
         session.invalidate();
         return "redirect:/";
     }
-
 }
-

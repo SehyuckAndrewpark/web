@@ -18,9 +18,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Use Servlet API
- */
 @Controller("articleControllerV1")
 @RequestMapping("/springmvc/v1/article")
 public class ArticleController {
@@ -32,9 +29,6 @@ public class ArticleController {
         this.articleDao = articleDao;
     }
 
-    /**
-     * ArticleList
-     */
     @GetMapping("/articleList") // /springmvc/v1/article/articleList
     public void articleList(HttpServletRequest request,
                             HttpServletResponse response)
@@ -51,9 +45,6 @@ public class ArticleController {
                 .forward(request, response);
     }
 
-    /**
-     * ArticleView
-     */
     @GetMapping("/articleView") // /springmvc/v1/article/articleView
     public void articleView(HttpServletRequest request,
                             HttpServletResponse response)
@@ -66,9 +57,6 @@ public class ArticleController {
                 .forward(request, response);
     }
 
-    /**
-     * ArticleForm
-     */
     @GetMapping("/articleForm")
     public void articleForm(HttpServletRequest request,
                             HttpServletResponse response)
@@ -77,7 +65,7 @@ public class ArticleController {
         User user = (User) session.getAttribute("USER");
         if (user == null) {
             response.sendRedirect(
-                    request.getContextPath() + "/springmvc/v1/user/loginForm");
+                    request.getContextPath() + "/app/springmvc/v1/user/loginForm");
             return;
         }
         request.getRequestDispatcher(
@@ -85,9 +73,6 @@ public class ArticleController {
                 .forward(request, response);
     }
 
-    /**
-     * ArticleEdit
-     */
     @GetMapping("/articleEdit")
     public void articleEdit(HttpServletRequest request,
                             HttpServletResponse response)
@@ -96,7 +81,7 @@ public class ArticleController {
         User user = (User) session.getAttribute("USER");
         if (user == null) {
             response.sendRedirect(
-                    request.getContextPath() + "/springmvc/v1/user/loginForm");
+                    request.getContextPath() + "/app/springmvc/v1/user/loginForm");
             return;
         }
         int articleId = Integer.parseInt(request.getParameter("articleId"));
@@ -111,17 +96,13 @@ public class ArticleController {
         }
     }
 
-    /**
-     * AddArticle
-     */
     @PostMapping("/addArticle")
     public void addArticle(HttpServletRequest request,
                            HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("USER");
         if (user == null) {
-            response.sendRedirect(
-                    request.getContextPath() + "/springmvc/v1/user/loginForm");
+            response.sendError(Response.SC_BAD_REQUEST);
             return;
         }
         Article article = new Article();
@@ -129,21 +110,19 @@ public class ArticleController {
         article.setContent(request.getParameter("content"));
         article.setUserId(user.getUserId());
         article.setName(user.getName());
+
         articleDao.addArticle(article);
-        response.sendRedirect("/springmvc/v1/article/articleList");
+        response.sendRedirect(
+                request.getContextPath() + "/app/springmvc/v1/article/articleList");
     }
 
-    /**
-     * UpdateArticle
-     */
     @PostMapping("/updateArticle")
     public void updateArticle(HttpServletRequest request,
                               HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("USER");
         if (user == null) {
-            response.sendRedirect(
-                    request.getContextPath() + "/springmvc/v1/user/loginForm");
+            response.sendError(Response.SC_BAD_REQUEST);
             return;
         }
         Article article = new Article();
@@ -155,15 +134,12 @@ public class ArticleController {
         if (updatedRows > 0)
             response.sendRedirect(
                     request.getContextPath() +
-                            "/springmvc/v1/article/articleView?articleId=" +
+                            "/app/springmvc/v1/article/articleView?articleId=" +
                             article.getArticleId());
         else
-            response.sendError(Response.SC_UNAUTHORIZED);
+            response.sendError(Response.SC_BAD_REQUEST);
     }
 
-    /**
-     * DeleteArticle
-     */
     @GetMapping("/deleteArticle")
     public void deleteArticle(HttpServletRequest request,
                               HttpServletResponse response) throws IOException {
@@ -171,15 +147,14 @@ public class ArticleController {
         User user = (User) session.getAttribute("USER");
         if (user == null) {
             response.sendRedirect(
-                    request.getContextPath() + "/springmvc/v1/user/loginForm");
+                    request.getContextPath() + "/app/springmvc/v1/user/loginForm");
             return;
         }
         int articleId = Integer.parseInt(request.getParameter("articleId"));
         int updatedRows = articleDao.deleteArticle(articleId, user.getUserId());
         if (updatedRows > 0)
-            response
-                    .sendRedirect(
-                            request.getContextPath() + "/springmvc/v1/article/articleList");
+            response.sendRedirect(
+                    request.getContextPath() + "/app/springmvc/v1/article/articleList");
         else
             response.sendError(Response.SC_UNAUTHORIZED);
     }

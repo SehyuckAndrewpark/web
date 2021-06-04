@@ -18,9 +18,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Use Servlet API
- */
 @Controller("userControllerV1")
 @RequestMapping("/springmvc/v1/user")
 public class UserController {
@@ -32,17 +29,16 @@ public class UserController {
         this.userDao = userDao;
     }
 
-    /**
-     * UserList
-     */
-    @GetMapping("/userList")        // /springmvc/v1/user/userList
+    @GetMapping("/userList")
     public void userList(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         String pageStr = Optional.ofNullable(request.getParameter("page")).orElse(
                 "1");
         int page = Integer.parseInt(pageStr);
         int count = 25;
         int offset = (page - 1) * count;
+
         List<User> userList = userDao.listUsers(offset, count);
         request.setAttribute("userList", userList);
 
@@ -50,84 +46,71 @@ public class UserController {
                 .forward(request, response);
     }
 
-    /**
-     * UserForm
-     */
-    @GetMapping("/userForm")         // /springmvc/v1/user/userForm
+    @GetMapping("/joinForm")
     public void userForm(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("/WEB-INF/jsp/springmvc/v1/user/userForm.jsp")
+
+        request.getRequestDispatcher("/WEB-INF/jsp/springmvc/v1/user/joinForm.jsp")
                 .forward(request, response);
     }
 
-    /**
-     * loginForm
-     */
-    @GetMapping("/loginForm")        // /springmvc/v1/user/loginForm
+    @GetMapping("/loginForm")
     public void loginForm(HttpServletRequest request,
                           HttpServletResponse response)
             throws ServletException, IOException {
+
         request.getRequestDispatcher("/WEB-INF/jsp/springmvc/v1/user/loginForm.jsp")
                 .forward(request, response);
     }
 
-    /**
-     * userInfo
-     */
-    @GetMapping("/userInfo")        // /springmvc/v1/user/userInfo
+    @GetMapping("/userInfo")
     public void userInfo(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         request.getRequestDispatcher("/WEB-INF/jsp/springmvc/v1/user/userInfo.jsp")
                 .forward(request, response);
     }
 
-    /**
-     * addUser
-     */
-    @PostMapping("/addUser")        // /springmvc/v1/user/addUser
+    @PostMapping("/join")
     public void addUser(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
+
         User user = new User();
         user.setEmail(request.getParameter("email"));
         user.setPassword(request.getParameter("password"));
         user.setName(request.getParameter("name"));
+
         try {
             userDao.addUser(user);
             response.sendRedirect(
-                    request.getContextPath() + "/springmvc/v1/user/userList");
+                    request.getContextPath() + "/app/springmvc/v1/user/userList");
         } catch (DuplicateKeyException e) {
             response.sendRedirect(
                     request.getContextPath() +
-                            "/springmvc/v1/user/userForm?msg=Duplicate email");
+                            "/app/springmvc/v1/user/userForm?msg=Duplicate email");
         }
     }
 
-    /**
-     * Login
-     */
-    @PostMapping("/login")          // /springmvc/v1/user/login
+    @PostMapping("/login")
     public void login(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
 
         String email = request.getParameter("email");
         String password = request.getParameter("password");
+
         try {
             User user = userDao.login(email, password);
             HttpSession session = request.getSession();
             session.setAttribute("USER", user);
             response.sendRedirect(
-                    request.getContextPath() + "/springmvc/v1/user/userInfo");
+                    request.getContextPath() + "/app/springmvc/v1/user/userInfo");
         } catch (EmptyResultDataAccessException e) {
             response.sendRedirect(request.getContextPath() +
-                    "/springmvc/v1/user/loginForm?msg=Wrong email or password");
+                    "/app/springmvc/v1/user/loginForm?msg=Wrong email or password");
         }
     }
 
-
-    /**
-     * Logout
-     */
-    @GetMapping("/logout")          // /springmvc/v1/user/logout
+    @GetMapping("/logout")
     public void logout(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
         HttpSession session = request.getSession();
