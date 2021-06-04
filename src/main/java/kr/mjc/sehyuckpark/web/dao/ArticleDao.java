@@ -15,19 +15,19 @@ import java.util.Map;
 @Repository
 public class ArticleDao {
 
+    public static final String COUNT_ARTICLES =
+            "select count(articleId) from article";
+
+    public static final String COUNT_USER_ARTICLES =
+            "select count(articleId) from article where userId=?";
+
     private static final String LIST_ARTICLES = """
       select articleId, title, userId, name, left(cdate,16) cdate, left(udate,16) udate
       from article order by articleId desc limit ?,?""";
 
-    private static final String MY_ARTICLES = """
-      select articleId, title, userId, name, left(cdate,16) cdate
+    public static final String USER_ARTICLES = """
+      select articleId, title, userId, name, left(cdate,16) cdate, left(udate,16) udate
       from article where userId=? order by articleId desc limit ?,?""";
-
-    public static final String COUNT_ARTICLES =
-            "select count(articleId) from article";
-
-    public static final String COUNT_MYARTICLES =
-            "select count(articleId) from article where userId=?";
 
     private static final String GET_ARTICLE = """
       select articleId, title, content, userId, name,
@@ -63,16 +63,17 @@ public class ArticleDao {
         return jdbcTemplate.query(LIST_ARTICLES, rowMapper, offset, count);
     }
 
-    public List<Article> myArticles(int userId, int offset, int count) {
-        return jdbcTemplate.query(MY_ARTICLES, rowMapper, userId, offset, count);
-    }
-
     public Integer countArticles() {
         return jdbcTemplate.queryForObject(COUNT_ARTICLES, Integer.class);
     }
 
-    public Integer countMyArticles(int userId) {
-        return jdbcTemplate.queryForObject(COUNT_MYARTICLES, Integer.class, userId);
+    public List<Article> userArticles(int userId, int offset, int count) {
+        return jdbcTemplate.query(USER_ARTICLES, rowMapper, userId, offset, count);
+    }
+
+    public Integer countUserArticles(int userId) {
+        return jdbcTemplate
+                .queryForObject(COUNT_USER_ARTICLES, Integer.class, userId);
     }
 
     public Article getArticle(int articleId) {
