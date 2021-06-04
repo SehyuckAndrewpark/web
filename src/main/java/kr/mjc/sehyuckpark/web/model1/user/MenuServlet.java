@@ -11,8 +11,8 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet("/model1/user/userInfo")
-public class UserInfoServlet extends HttpServlet {
+@WebServlet("/model1/user/")
+public class MenuServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -23,8 +23,11 @@ public class UserInfoServlet extends HttpServlet {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("USER");
 
-        out.println("<html><body><h3>사용자 정보</h3>");
-        out.format("<p>%s</p>", user);
+        out.println("<html><body><h3>Model 1. Only Servlets</h3>");
+        out.format("<p><a href='%s/'>홈</a></p>", request.getContextPath());
+        out.println("<p><a href='userList'>사용자 목록</a></p>");
+        out.println("<p><a href='loginForm'>로그인</a></p>");
+        out.println("<p><a href='joinForm'>회원가입</a></p>");
         out.println("</body></html>");
         out.close();
     }

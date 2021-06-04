@@ -32,7 +32,7 @@ public class AddUserServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/model1/user/userList");
         } catch (DuplicateKeyException e) {
             response.sendRedirect(request.getContextPath() +
-                    "/model1/user/userForm?msg=Duplicate email");
+                    "/model1/user/joinForm?msg=Duplicate email");
         }
     }
 }

@@ -9,8 +9,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Optional;
 
-@WebServlet("/model1/user/loginForm")
-public class LoginFormServlet extends HttpServlet {
+@WebServlet("/model1/user/joinForm")
+public class JoinFormServlet extends HttpServlet {
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -18,16 +18,18 @@ public class LoginFormServlet extends HttpServlet {
 
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
-        String msg = Optional.ofNullable(request.getParameter("msg")).orElse("");
+        String msg =
+                Optional.ofNullable((String) request.getParameter("msg")).orElse("");
         out.format("""
         <!DOCTYPE html>
         <html>
         <body>
-          <h3>로그인</h3>
-          <form action="login" method="post">
+          <h3>사용자 등록</h3>
+          <form action="addUser" method="post">
             <p><input type="email" name="email" placeholder="이메일" required autofocus /></p>
             <p><input type="password" name="password" placeholder="비밀번호" required /></p>
-            <p><button type="submit">로그인</button></p>
+            <p><input type="text" name="name" placeholder="이름" required /></p>
+            <p><button type="submit">저장</button></p>
           </form>
           <p style="color:red;">%s</p>
         </body>
