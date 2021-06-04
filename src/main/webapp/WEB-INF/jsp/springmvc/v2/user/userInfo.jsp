@@ -9,5 +9,7 @@
 <p>사용자 번호 : ${user.userId}</p>
 <p>이메일 : ${user.email}</p>
 <p>이름 : ${user.name}</p>
+<p><a href="./app/springmvc/v2/article/userArticles?userId=${user.userId}">
+    ${user.name}의 글</a></p>
 </body>
 </html>

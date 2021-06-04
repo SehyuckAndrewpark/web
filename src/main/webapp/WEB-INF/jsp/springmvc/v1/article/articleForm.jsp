@@ -16,7 +16,7 @@
 <body>
 <%@ include file="/WEB-INF/jsp/springmvc/v1/menu.jsp" %>
 <h3>글쓰기</h3>
-<form action="./springmvc/v1/article/addArticle" method="post">
+<form action="./app/springmvc/v1/article/addArticle" method="post">
     <p><input type="text" name="title" required autofocus/></p>
     <p><textarea name="content" required></textarea></p>
     <p>

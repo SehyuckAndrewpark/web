@@ -1,4 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="e"
+           uri="https://www.owasp.org/index.php/OWASP_Java_Encoder_Project" %>
 <c:set var="count" value="${empty param.count? 20: param.count}"/>
 <c:set var="page" value="${empty param.page? 1: param.page}"/>
 <c:set var="maxPage" value="${Math.ceil(totalCount / count).intValue()}"/>
@@ -25,26 +27,27 @@
                style="width:50px;" step="10"/>행씩
     </p>
 </form>
-<p><a href="./springmvc/v2/article/articleForm">글쓰기</a></p>
+<p><a href="./app/springmvc/v2/article/s/articleForm">글쓰기</a></p>
 <c:forEach var="article" items="${articleList}">
     <p style="margin: 0;"><a
-            href="./springmvc/v2/article/articleView?articleId=${article.articleId}">
-            ${article.articleId}. ${article.title}</a> / <a
-            href="./springmvc/v2/user/userInfo?userId=${article.userId}">
+            href="./app/springmvc/v2/article/articleView?articleId=${article.articleId}">
+            ${article.articleId}. ${e:forHtml(article.title)}</a> / <a
+            href="./app/springmvc/v2/user/userInfo?userId=${article.userId}">
             ${article.name}</a>, ${article.udate}</p>
 </c:forEach>
 <script>
+    var form1 = document.form1;
     document.getElementById("btnPrev").onclick = function () {
-        document.forms["form1"]["page"].value--;
+        form1.page.value--;
     };
 
     document.getElementById("btnNext").onclick = function () {
-        document.forms["form1"]["page"].value++;
+        form1.page.value++;
     };
 
-    document.forms["form1"]["count"].onchange = function () {
-        document.forms["form1"].submit();
-    }
+    form1.count.onchange = function () {
+        form1.submit();
+    };
 </script>
 </body>
 </html>

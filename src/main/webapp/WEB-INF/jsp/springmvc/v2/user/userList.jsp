@@ -29,16 +29,17 @@
     <p style="margin:0">${user.userId}, ${user.email}, ${user.name}</p>
 </c:forEach>
 <script>
+    var form1 = document.forms["form1"];
     document.getElementById("btnPrev").onclick = function () {
-        document.forms["form1"]["page"].value--;
+        form1["page"].value--;
     };
 
     document.getElementById("btnNext").onclick = function () {
-        document.forms["form1"]["page"].value++;
+        form1["page"].value++;
     };
 
-    document.forms["form1"]["count"].onchange = function () {
-        document.forms["form1"].submit();
+    form1["count"].onchange = function () {
+        form1.submit();
     }
 </script>
 </body>

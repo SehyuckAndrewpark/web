@@ -18,7 +18,7 @@
 <%@ include file="/WEB-INF/jsp/springmvc/v1/menu.jsp" %>
 <h3>글수정</h3>
 <% Article article = (Article) request.getAttribute("article"); %>
-<form action="./springmvc/v1/article/updateArticle" method="post">
+<form action="./app/springmvc/v1/article/updateArticle" method="post">
     <p><input type="text" name="title" value="<%= article.getTitle()%>" required
               autofocus/></p>
     <p><textarea name="content" required><%= article.getContent()%></textarea></p>
