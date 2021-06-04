@@ -23,9 +23,6 @@ public class UserController {
         this.userDao = userDao;
     }
 
-    /**
-     * ListUser
-     */
     public void userList(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setAttribute("userList", userDao.listUsers(0, 100));
@@ -34,19 +31,13 @@ public class UserController {
                 .forward(request, response);
     }
 
-    /**
-     * UserForm
-     */
-    public void userForm(HttpServletRequest request, HttpServletResponse response)
+    public void joinForm(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        request.getRequestDispatcher("/WEB-INF/jsp/mvc/user/userForm.jsp")
+        request.getRequestDispatcher("/WEB-INF/jsp/mvc/user/joinForm.jsp")
                 .forward(request, response);
     }
 
-    /**
-     * LoginForm
-     */
     public void loginForm(HttpServletRequest request,
                           HttpServletResponse response)
             throws ServletException, IOException {
@@ -55,9 +46,6 @@ public class UserController {
                 .forward(request, response);
     }
 
-    /**
-     * UserInfo
-     */
     public void userInfo(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -65,9 +53,6 @@ public class UserController {
                 .forward(request, response);
     }
 
-    /**
-     * AddUser
-     */
     public void addUser(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
 
@@ -80,14 +65,11 @@ public class UserController {
             userDao.addUser(user);
             response.sendRedirect(request.getContextPath() + "/mvc/user/userList");
         } catch (DuplicateKeyException e) {
-            response.sendRedirect(request.getContextPath() +
-                    "/mvc/user/userForm?msg=Duplicate email");
+            response.sendRedirect(
+                    request.getContextPath() + "/mvc/user/joinForm?msg=Duplicate email");
         }
     }
 
-    /**
-     * Login
-     */
     public void login(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
 
@@ -105,9 +87,6 @@ public class UserController {
         }
     }
 
-    /**
-     * Logout
-     */
     public void logout(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
         HttpSession session = request.getSession();

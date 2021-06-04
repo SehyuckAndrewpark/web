@@ -25,9 +25,6 @@ public class ArticleController {
         this.articleDao = articleDao;
     }
 
-    /**
-     * ArticleList
-     */
     public void articleList(HttpServletRequest request,
                             HttpServletResponse response)
             throws ServletException, IOException {
@@ -37,14 +34,12 @@ public class ArticleController {
         int count = 25;
         int offset = (page - 1) * count;
         List<Article> articleList = articleDao.listArticles(offset, count);
+
         request.setAttribute("articleList", articleList);
         request.getRequestDispatcher("/WEB-INF/jsp/mvc/article/articleList.jsp")
                 .forward(request, response);
     }
 
-    /**
-     * ArticleView
-     */
     public void articleView(HttpServletRequest request,
                             HttpServletResponse response)
             throws ServletException, IOException {
@@ -55,10 +50,6 @@ public class ArticleController {
                 .forward(request, response);
     }
 
-
-    /**
-     * ArticleForm
-     */
     public void articleForm(HttpServletRequest request,
                             HttpServletResponse response)
             throws IOException, ServletException {
@@ -72,10 +63,6 @@ public class ArticleController {
                 .forward(request, response);
     }
 
-    /**
-     * ArticleEdit
-     * 401 Unauthorized.
-     */
     public void articleEdit(HttpServletRequest request,
                             HttpServletResponse response)
             throws IOException, ServletException {
@@ -86,7 +73,6 @@ public class ArticleController {
             return;
         }
         int articleId = Integer.parseInt(request.getParameter("articleId"));
-
         Article article = articleDao.getArticle(articleId);
         if (user.getUserId() == article.getUserId()) {
             request.setAttribute("article", article);
@@ -97,9 +83,6 @@ public class ArticleController {
         }
     }
 
-    /**
-     * AddArticle
-     */
     public void addArticle(HttpServletRequest request,
                            HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
@@ -113,15 +96,11 @@ public class ArticleController {
         article.setContent(request.getParameter("content"));
         article.setUserId(user.getUserId());
         article.setName(user.getName());
-
         articleDao.addArticle(article);
-        response.sendRedirect("/mvc/article/articleList");
+        response
+                .sendRedirect(request.getContextPath() + "/mvc/article/articleList");
     }
 
-    /**
-     * UpdateArticle
-     * 401 Unauthorized.
-     */
     public void updateArticle(HttpServletRequest request,
                               HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
@@ -130,13 +109,11 @@ public class ArticleController {
             response.sendRedirect(request.getContextPath() + "/mvc/user/loginForm");
             return;
         }
-
         Article article = new Article();
         article.setArticleId(Integer.parseInt(request.getParameter("articleId")));
         article.setTitle(request.getParameter("title"));
         article.setContent(request.getParameter("content"));
         article.setUserId(user.getUserId());
-
         int updatedRows = articleDao.updateArticle(article);
         if (updatedRows > 0)
             response.sendRedirect(
@@ -146,10 +123,6 @@ public class ArticleController {
             response.sendError(Response.SC_UNAUTHORIZED);
     }
 
-    /**
-     * DeleteArticle
-     * 401 Unauthorized.
-     */
     public void deleteArticle(HttpServletRequest request,
                               HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
@@ -158,9 +131,7 @@ public class ArticleController {
             response.sendRedirect(request.getContextPath() + "/mvc/user/loginForm");
             return;
         }
-
         int articleId = Integer.parseInt(request.getParameter("articleId"));
-
         int updatedRows = articleDao.deleteArticle(articleId, user.getUserId());
         if (updatedRows > 0)
             response
