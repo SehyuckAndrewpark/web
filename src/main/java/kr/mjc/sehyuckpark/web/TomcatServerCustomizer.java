@@ -40,7 +40,8 @@ public class TomcatServerCustomizer
                             new HashSet<>());
             context.setJspConfigDescriptor(jspConfigDescriptor);
 
-            context.addWelcomeFile("/index.html");
+            context.addWelcomeFile("/index.jsp");
+            context.addWelcomeFile("/index.jsp");
         });
         factory.setTomcatContextCustomizers(col);
         log.info("Run Tomcat Customizer");
