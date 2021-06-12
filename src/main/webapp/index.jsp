@@ -1,16 +1,14 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: ROBIN
-  Date: 2021-05-04
-  Time: 오후 3:18
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
 <html>
-  <head>
-    <title>$Title$</title>
-  </head>
-  <body>
-  $END$
-  </body>
+<body>
+<h1>Web Programming II</h1>
+<p><a href="./model1/user/">User App - Model 1</a></p>
+<p><a href="./model2/user/">User App - Model 2</a></p>
+<p><a href="./mvc/article/articleList">User - Article MVC App</a></p>
+<p><a href="./app/springmvc/v1/article/articleList">Spring Web MVC V1 - Using
+    Servlet API</a></p>
+<p><a href="./app/springmvc/v2/article/articleList">Spring Web MVC V2 - Not
+    Using
+    Sevlet API</a></p>
+</body>
 </html>
