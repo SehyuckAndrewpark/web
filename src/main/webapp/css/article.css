@@ -1,0 +1,188 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+}
+
+/* Container */
+header {
+    height: 100px;
+    padding: 10px;
+    background-color: lightyellow;
+}
+
+.logo {
+    height: 100%;
+}
+
+.nav {
+    margin: 0;
+    padding: 0;
+    background-color: black;
+}
+
+.nav li {
+    display: inline;
+}
+
+.nav a {
+    display: inline-block;
+    padding: 8px;
+    color: #f6f5f4;
+    text-decoration: none;
+    font-size: small;
+}
+
+.nav a:hover {
+    background-color: lightgray;
+    color: black;
+}
+
+main {
+    padding: 10px;
+    min-height: 400px;
+}
+
+footer {
+    background-color: lightgray;
+    padding: 25px;
+    text-align: center;
+}
+
+/* Button */
+.button {
+    padding: 5px;
+    color: white;
+    font-size: small;
+    display: inline-block;
+    text-decoration: none;
+    border: none;
+}
+
+.button.a {
+    background-color: #04AA6D;
+}
+
+.button.a:hover {
+    background-color: green;
+}
+
+.button.b {
+    background-color: gray;
+}
+
+.button.b:hover {
+    background-color: #666666;
+}
+
+/* List */
+ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+ul.info {
+    border-top: 1px solid lightgray;
+    border-bottom: 1px solid lightgray;
+}
+
+ul.info li {
+    padding: 5px;
+}
+
+/* Grid */
+.list {
+    display: grid;
+    border-top: 1px solid lightgray;
+}
+
+.list.user {
+    grid-template-columns: auto auto auto;
+}
+
+.list.article {
+    grid-template-columns: auto auto auto auto;
+}
+
+.list a {
+    text-decoration: none;
+    display: block;
+    padding: 2px;
+}
+
+.list a:hover {
+    background-color: lightgray;
+}
+
+.list > div {
+    border-bottom: 1px solid lightgray;
+}
+
+/* Form */
+input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid lightgray;
+    font-size: small;
+}
+
+textarea {
+    width: 100%;
+    padding: 5px;
+    min-height: 200px;
+    font-size: small;
+}
+
+.pagebar input {
+    width: 50px;
+    padding: 3px;
+    text-align: center;
+}
+
+/* Others */
+p {
+    margin: 10px 0;
+}
+
+.warn {
+    color: orangered;
+}
+
+.info label {
+    display: inline-block;
+    width: 100px;
+    font-weight: bold;
+}
+
+span.title {
+    font-weight: bold;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid lightgray;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .list.article .item1 {
+        grid-column: 1;
+        grid-row: span 2;
+    }
+
+    .list.article .item2 {
+        grid-column: 2 / span 2;
+        border-bottom: none;
+    }
+
+    .list.article .item3 {
+        grid-column: 2;
+    }
+
+    .list.article .item4 {
+        grid-column: 3;
+    }
+}
