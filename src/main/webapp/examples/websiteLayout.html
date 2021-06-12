@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>CSS Website Layout</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    h1, h2, p {
+      margin: 0;
+    }
+
+    body {
+      margin: 0;
+    }
+
+    .header {
+      background-color: #ccccff;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .topnav {
+      background-color: #000000;
+    }
+
+    .topnav a {
+      display: inline-block;
+      padding: 10px;
+      color: #eeeeee;
+      text-decoration: none;
+    }
+
+    .topnav a:hover {
+      background-color: #dddddd;
+      color: #000000;
+    }
+
+    .side {
+      background-color: #ffcccc;
+      width: 25%;
+      padding: 10px;
+    }
+
+    .middle {
+      background-color: #ffffcc;
+      width: 50%;
+      padding: 10px;
+    }
+
+    .footer {
+      background-color: #aaaaaa;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .row {
+      display: flex;
+    }
+
+    @media (max-width: 600px) {
+      .row {
+        flex-direction: column;
+      }
+
+      .column {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="header">
+  <h1>Header</h1>
+  <p>Resize the browser window to see the responsive effect.</p>
+</div>
+
+<div class="topnav">
+  <a href="#">Link</a>
+  <a href="#">Link</a>
+  <a href="#">Link</a>
+</div>
+
+<div class="row">
+  <div class="column side">
+    <h2>Side</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit..</p>
+  </div>
+
+  <div class="column middle">
+    <h2>Main Content</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sit
+      amet pretium urna. Vivamus venenatis velit nec neque ultricies, eget
+      elementum magna tristique. Quisque vehicula, risus eget aliquam placerat,
+      purus leo tincidunt eros, eget luctus quam orci in velit. Praesent
+      scelerisque tortor sed accumsan convallis.</p>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas sit
+      amet pretium urna. Vivamus venenatis velit nec neque ultricies, eget
+      elementum magna tristique. Quisque vehicula, risus eget aliquam placerat,
+      purus leo tincidunt eros, eget luctus quam orci in velit. Praesent
+      scelerisque tortor sed accumsan convallis.</p>
+  </div>
+
+  <div class="column side">
+    <h2>Side</h2>
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit..</p>
+  </div>
+</div>
+
+<div class="footer">
+  <p>Footer</p>
+</div>
+
+</body>
+</html>
